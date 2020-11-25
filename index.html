@@ -21,7 +21,7 @@
         let racketXSeparation = 50;
         let racketYSeparation = 50;
 
-        let ballVelocity = 5;
+        let ballVelocity = 5*2;
         let ballXPosition = 75;
 
         //Limits to line of backrackets
@@ -51,14 +51,11 @@
         function drawInitialComponents() {
             //The fillStyle order its so important on overlapping context... as z-index works
             //Background Fill
-            canvasContext.fillStyle = 'black';
-            canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+            drawRect(0, 0, canvas.width, canvas.height,'black');
             //Player 1 Racket
-            canvasContext.fillStyle = 'white';
-            canvasContext.fillRect(racketXSeparation, racketYSeparation, racketWidth, racketHeight);
+            drawRect(racketXSeparation, racketYSeparation, racketWidth, racketHeight, 'white');
             //Player 2 Racket
-            canvasContext.fillStyle = 'white';
-            canvasContext.fillRect(canvas.width - (racketXSeparation + racketWidth), canvas.height - (racketYSeparation + racketHeight), racketWidth, racketHeight);
+            drawRect(canvas.width - (racketXSeparation + racketWidth), canvas.height - (racketYSeparation + racketHeight), racketWidth, racketHeight,'white')
         }
 
         function ballMovement() {
@@ -80,9 +77,30 @@
                 }
             }
             //Ball
-            canvasContext.fillStyle = 'white';
-            canvasContext.fillRect(ballXPosition, 350, 25, 25);
+            //drawRect(ballXPosition, 350, 25, 25, 'white');
+            drawCircle(ballXPosition,350,15,'white');
         }
+
+        /**
+         * Draws a Rect Element on window by:
+         *      leftX: Distance from left on axis X
+         *      topY:  Distance from top on axis Y
+         *      width: The width of the element
+         *      height: The height of the element
+         *      colour: Colour will be written          
+         * */
+        function drawRect(leftX, topY, width, height, colour){
+            canvasContext.fillStyle = colour;
+            canvasContext.fillRect(leftX, topY, width, height);
+        }
+
+        function drawCircle(leftX,topY,radiusSize,colour){
+            canvasContext.fillStyle = colour;
+            canvasContext.beginPath();
+            canvasContext.arc(leftX,topY,radiusSize,0,Math.PI*2, true);
+            canvasContext.fill();
+        }
+
     </script>
 </body>
 
