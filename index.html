@@ -8,10 +8,80 @@
 </head>
 
 <body>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <canvas id="gameCanvas" width="1000" height="600"></canvas>
     <script>
+        let canvas;
+        let canvasContext;
+
+        let leftToRightDirection;
+
+        //Possible objects in future: rackets and ball
+        let racketHeight = 175;
+        let racketWidth = 30;
+        let racketXSeparation = 50;
+        let racketYSeparation = 50;
+
+        let ballVelocity = 5;
+        let ballXPosition = 75;
+
+        //Limits to line of backrackets
+        let leftPlayerLimit, rightPlayerLimit;
+
         window.onload = function () {
-            console.log("Hello World!!");
+            //console.log('Hello World!!')
+            canvas = document.getElementById('gameCanvas');
+            canvasContext = canvas.getContext('2d');
+
+            //Assing limits for ball
+            leftPlayerLimit = racketXSeparation + 10;
+            rightPlayerLimit = canvas.width - racketXSeparation - 10;
+
+            leftToRightDirection = true;
+            drawInitialComponents();
+            //He creates a function inside of setInterval just to include every time the refresh of rackets and ball at same time
+            // And avoid any call of that behaviour on the game, i think as a security part...
+            //setInterval(ballMovement, 25);
+            setInterval(function () {
+                drawInitialComponents();
+                ballMovement();
+                //racketsMovement();
+            }, 25);
+        }
+
+        function drawInitialComponents() {
+            //The fillStyle order its so important on overlapping context... as z-index works
+            //Background Fill
+            canvasContext.fillStyle = 'black';
+            canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+            //Player 1 Racket
+            canvasContext.fillStyle = 'white';
+            canvasContext.fillRect(racketXSeparation, racketYSeparation, racketWidth, racketHeight);
+            //Player 2 Racket
+            canvasContext.fillStyle = 'white';
+            canvasContext.fillRect(canvas.width - (racketXSeparation + racketWidth), canvas.height - (racketYSeparation + racketHeight), racketWidth, racketHeight);
+        }
+
+        function ballMovement() {
+            if (leftToRightDirection) {
+                if (ballXPosition < rightPlayerLimit) {
+                    //console.log('Dentro de los limites de Izq a Dcha')
+                    ballXPosition += ballVelocity;
+                } else {
+                    //console.log('Salio de los limites por la Dcha')
+                    leftToRightDirection = false;
+                }
+            } else {
+                if (ballXPosition > leftPlayerLimit) {
+                    //console.log('Dentro de los limites de Dcha a Izq')
+                    ballXPosition -= ballVelocity;
+                } else {
+                    //console.log('Salio de los limites por la Izq')
+                    leftToRightDirection = true;
+                }
+            }
+            //Ball
+            canvasContext.fillStyle = 'white';
+            canvasContext.fillRect(ballXPosition, 350, 25, 25);
         }
     </script>
 </body>
